@@ -10,6 +10,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Source files
 set(SOURCES
     src/main.cc
+    src/vec3.h
+    src/color.h
 )
 
 # Include src directory for header files
