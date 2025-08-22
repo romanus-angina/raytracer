@@ -12,6 +12,10 @@ set(SOURCES
     src/main.cc
     src/vec3.h
     src/color.h
+    src/ray.h
+    src/hittable.h
+    src/hittable_list.h
+    src/sphere.h
 )
 
 # Include src directory for header files
