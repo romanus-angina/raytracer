@@ -24,12 +24,6 @@ class vec3 {
             e[2] += v.e[2];
             return *this;
         }
-
-        vec3& operator-=(const vec3& v){
-            e[0] -= v.e[0];
-            e[1] -= v.e[1];
-            e[2] -= v.e[2];
-        }
         
         vec3& operator*=(double t){
             e[0] *= t;
@@ -50,9 +44,6 @@ class vec3 {
 
 // We use point3 as an alias for vec3
 using point3 = vec3;
-
-// Similarly color is an alias for vec3
-using color = vec3;
 
 // Utility Functions
 inline std::ostream& operator<<(std::ostream &out, const vec3 &v) {
