@@ -20,10 +20,10 @@ class sphere : public hittable {
                 auto sqrtd = std::sqrt(discriminant);
 
                 //Calculate nearest root in acceptable range
-                auto root = (-h - sqrtd) / a;
+                auto root = (h - sqrtd) / a;
                 if (root <= ray_tmin || ray_tmax <= root) {
                     root = (h + sqrtd) / a;
-                    if (root <= ray_tmin || ray_tmax <= ray_tmax) {
+                    if (root <= ray_tmin || ray_tmax <= root) {
                         return false; // No valid intersection
                     }
                 }
