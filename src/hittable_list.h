@@ -1,11 +1,7 @@
 #ifndef HITTABLE_LIST_H
 #define HITTABLE_LIST_H
-#include <vector>
 #include "hittable.h"
 #include<memory>
-
-using std::make_shared;
-using std::shared_ptr;
 
 class hittable_list: public hittable {
     public:
