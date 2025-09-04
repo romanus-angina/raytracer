@@ -1,0 +1,29 @@
+#ifndef INTERVAL_H
+#define INTERVAL_H
+#include "constants.h"
+
+class interval {
+    public:
+        interval() : min(+infinity), max(-infinity) {}
+        interval(double min, double max) : min(min), max(max) {}
+        double min;
+        double max;
+
+        double size() const{
+            return max-min;
+        }
+
+        bool contains(double x) const{
+            return x >= min && x <= max;
+        }
+
+        bool surrounds(double x) const{
+            return x > min && x < max;
+        }
+        static const interval empty, universe;
+};
+
+const interval interval::empty = interval(+infinity, -infinity);
+const interval interval::universe = interval(-infinity, +infinity);
+
+# endif // INTERVAL_H
