@@ -22,7 +22,7 @@ class camera{
                     ray r = get_ray(i, j);
                     pixel_color += ray_color(r, world);
                 }
-                write_color(std::cout, pixel_color);
+                write_color(std::cout, pixel_color * pixel_sample_scale);
             }
     }
 
