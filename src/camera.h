@@ -6,6 +6,7 @@ class camera{
     double aspect_ratio = 1.0; // Ratio of image width over image height
     int image_width = 100; // Rendered image width in pixel count
     int samples_per_pixel = 10; // Number of samples per pixel for anti-aliasing
+    int max_depth = 10; // Maximum recursion depth for ray tracing
 
     void render(const hittable& world){
 
@@ -20,7 +21,7 @@ class camera{
                 color pixel_color(0,0,0);
                 for(int sample = 0; sample < samples_per_pixel; sample++){
                     ray r = get_ray(i, j);
-                    pixel_color += ray_color(r, world);
+                    pixel_color += ray_color(r,max_depth, world);
                 }
                 write_color(std::cout, pixel_color * pixel_sample_scale);
             }
@@ -63,11 +64,15 @@ class camera{
     }
 
 
-    color ray_color(const ray& r, const hittable& world){
+    color ray_color(const ray& r, int depth, const hittable& world){
+
+        if(depth <= 0){
+            return color(0,0,0);
+        }
         hit_record rec;
         if (world.hit(r, interval(0, infinity), rec)){
             vec3 direction = random_on_hemisphere(rec.normal);
-            return 0.5 *(ray_color(ray(rec.p, direction), world));
+            return 0.5 *(ray_color(ray(rec.p, direction), depth -1, world));
         }
         vec3 unit_direction = unit_vector(r.direction());
         auto a = 0.5 * (unit_direction.y() + 1.0);
