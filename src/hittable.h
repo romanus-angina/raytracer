@@ -1,12 +1,13 @@
 #ifndef HITTABLE_H
 #define HITTABLE_H
 # include "interval.h"
-
+class material;
 class hit_record{
     public:
         point3 p; // Point of intersection
         vec3 normal; // Normal at the intersection point
         double t; // Parameter t for the ray equation
+        shared_ptr<material> mat; // Pointer to the material of the object hit
         bool front_face; // Indicates if the ray hit the front or back face of the object
 
         void set_face_normal(const ray& r, const vec3& outward_normal) {
