@@ -6,7 +6,9 @@
 # include "interval.h"
 class sphere : public hittable {
     public:
-        sphere(const point3& center, double radius): center(center), radius(std::fmax(0, radius)) {}
+        sphere(const point3& center, double radius): center(center), radius(std::fmax(0, radius)) {
+            //TODO: Initialize material pointer mat
+        }
 
         bool hit(const ray& r, interval ray_t, hit_record& rec) const override{
             vec3 oc = center - r.origin();
@@ -39,6 +41,7 @@ class sphere : public hittable {
     private:
         point3 center;
         double radius;
+        shared_ptr<material> mat; // Pointer to the material of the sphere
 };
 
 #endif // SPHERE_H
