@@ -6,9 +6,8 @@
 # include "interval.h"
 class sphere : public hittable {
     public:
-        sphere(const point3& center, double radius): center(center), radius(std::fmax(0, radius)) {
-            //TODO: Initialize material pointer mat
-        }
+        sphere(const point3& center, double radius, shared_ptr<material> mat)
+            : center(center), radius(std::fmax(0, radius)), mat(mat) {}
 
         bool hit(const ray& r, interval ray_t, hit_record& rec) const override{
             vec3 oc = center - r.origin();
@@ -31,6 +30,7 @@ class sphere : public hittable {
                 }
                 rec.t = root;
                 rec.p = r.at(rec.t);
+                rec.mat = mat; // Assign the material of the sphere to the hit record
                 vec3 outward_normal = (rec.p - center) / radius; // Normal at the intersection point
                 rec.set_face_normal(r, outward_normal); // Set the normal and front face
                 return true; // Intersection found
