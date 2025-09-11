@@ -8,6 +8,7 @@ class camera{
     int image_width = 100; // Rendered image width in pixel count
     int samples_per_pixel = 10; // Number of samples per pixel for anti-aliasing
     int max_depth = 10; // Maximum recursion depth for ray tracing
+    double vfov = 90.0; // Vertical field of view in degrees
 
     void render(const hittable& world){
 
@@ -48,7 +49,9 @@ class camera{
 
         // Camera
         auto focal_length = 1.0;
-        auto viewpoint_height = 2.0;
+        auto theta = degrees_to_radians(vfov);
+        auto h = tan(theta/2);
+        auto viewpoint_height = 2.0 * h * focal_length;
         auto viewpoint_width = viewpoint_height * (double(image_width) / double(image_height));
 
         // Calculate viewpoint vectors
