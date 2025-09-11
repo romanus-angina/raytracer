@@ -34,7 +34,7 @@ class vec3 {
         }
 
         double length_squared() const { return e[0]*e[0] + e[1]*e[1] +e[2]*e[2];}
-        
+
         bool near_zero() const {
             // Return true if the vector is close to zero in all dimensions.
             const auto s = 1e-8;
@@ -95,6 +95,10 @@ inline vec3 cross(const vec3& u, const vec3& v){
     return vec3(u.e[1] * v.e[2] - u.e[2] * v.e[1], 
                 u.e[2] * v.e[0] - u.e[0] * v.e[2], 
                 u.e[0] * v.e[1] - u.e[1] * v.e[0]);
+}
+
+inline vec3 reflect(const vec3& v, const vec3& n){
+    return v - 2*dot(v,n)*n;
 }
 
 // unit vector
