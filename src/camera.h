@@ -9,6 +9,9 @@ class camera{
     int samples_per_pixel = 10; // Number of samples per pixel for anti-aliasing
     int max_depth = 10; // Maximum recursion depth for ray tracing
     double vfov = 90.0; // Vertical field of view in degrees
+    point3 lookfrom = point3(0, 0, 0); // Camera position in world space
+    point3 lookat = point3(0,0, -1); // Point in world space the camera is looking at
+    vec3 vup = vec3(0,1,0); // "Up" direction for the camera
 
     void render(const hittable& world){
 
@@ -39,31 +42,37 @@ class camera{
     point3 pixel00_loc; // World space location of the center of the upper left pixel
     vec3 pixel_delta_u; // World space vector to move one pixel right
     vec3 pixel_delta_v; // World space vector to move one pixel down
+    vec3 u, v, w; // Camera coordinate system basis vectors
 
     void initialize(){
         // Calculate the image height based on the aspect ratio
         image_height = int(image_width / aspect_ratio);
         image_height = (image_height < 1) ? 1: image_height;
         pixel_sample_scale = 1.0 / samples_per_pixel;
-        center = point3(0, 0, 0);
+        center = lookfrom;
 
         // Camera
-        auto focal_length = 1.0;
+        auto focal_length = (lookfrom - lookat).length();
         auto theta = degrees_to_radians(vfov);
         auto h = tan(theta/2);
         auto viewpoint_height = 2.0 * h * focal_length;
         auto viewpoint_width = viewpoint_height * (double(image_width) / double(image_height));
 
+        // Calculate camera basis vectors
+        w = unit_vector(lookfrom - lookat);
+        u = unit_vector(cross(vup, w));
+        v = cross(w, u);
+
         // Calculate viewpoint vectors
-        auto viewport_u = vec3(viewpoint_width, 0, 0);
-        auto viewport_v = vec3(0, -viewpoint_height, 0);
+        auto viewport_u = viewpoint_width * u;
+        auto viewport_v = viewpoint_height * -v;
 
         // Calculate delta vectors
         pixel_delta_u = viewport_u / image_width;
         pixel_delta_v = viewport_v / image_height;
 
         // Calculate the upper left pixel of viewport
-        auto viewport_upper_left = center - vec3(0, 0, focal_length) - viewport_u/2 - viewport_v/2;
+        auto viewport_upper_left = center - (focal_length * w) - 0.5 * viewport_u - 0.5 * viewport_v;
         pixel00_loc = viewport_upper_left + 0.5 *(pixel_delta_u + pixel_delta_v);
     }
 
