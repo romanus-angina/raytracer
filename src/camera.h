@@ -12,6 +12,8 @@ class camera{
     point3 lookfrom = point3(0, 0, 0); // Camera position in world space
     point3 lookat = point3(0,0, -1); // Point in world space the camera is looking at
     vec3 vup = vec3(0,1,0); // "Up" direction for the camera
+    double defocus_angle = 0.0; // Aperture angle for depth of field effect (not implemented)
+    double focus_dist = 10; // Focus distance for depth of field effect (not implemented)
 
     void render(const hittable& world){
 
@@ -43,6 +45,8 @@ class camera{
     vec3 pixel_delta_u; // World space vector to move one pixel right
     vec3 pixel_delta_v; // World space vector to move one pixel down
     vec3 u, v, w; // Camera coordinate system basis vectors
+    double defocus_u; // Defocus vectors for depth of field effect (not implemented)
+    double defocus_v; // Defocus vectors for depth of field effect (not implemented)
 
     void initialize(){
         // Calculate the image height based on the aspect ratio
@@ -52,10 +56,9 @@ class camera{
         center = lookfrom;
 
         // Camera
-        auto focal_length = (lookfrom - lookat).length();
         auto theta = degrees_to_radians(vfov);
         auto h = tan(theta/2);
-        auto viewpoint_height = 2.0 * h * focal_length;
+        auto viewpoint_height = 2.0 * h * focus_dist;
         auto viewpoint_width = viewpoint_height * (double(image_width) / double(image_height));
 
         // Calculate camera basis vectors
@@ -72,8 +75,13 @@ class camera{
         pixel_delta_v = viewport_v / image_height;
 
         // Calculate the upper left pixel of viewport
-        auto viewport_upper_left = center - (focal_length * w) - 0.5 * viewport_u - 0.5 * viewport_v;
+        auto viewport_upper_left = center - (focus_dist * w) - 0.5 * viewport_u - 0.5 * viewport_v;
         pixel00_loc = viewport_upper_left + 0.5 *(pixel_delta_u + pixel_delta_v);
+
+        // Defocus vectors for depth of field effect (not implemented)
+        auto defocus_radius = focus_dist * tan(degrees_to_radians(defocus_angle) / 2);
+        defocus_u = defocus_radius * u;
+        defocus_v = defocus_radius * v;
     }
 
 
@@ -99,9 +107,14 @@ class camera{
     ray get_ray(int i, int j){
         auto offset = sample_square();
         auto pixel_sample = pixel00_loc + (i + offset.x()) * pixel_delta_u + (j + offset.y()) * pixel_delta_v;
-        auto ray_origin = center;
+        auto ray_origin = (defocus_angle <= 0.0) ? center : defocus_disk_sample();
         auto ray_direction = pixel_sample - ray_origin;
         return ray(ray_origin, ray_direction);
+    }
+
+    point3 defocus_disk_sample(){
+        auto rd = sample_square();
+        return center + rd.x() * defocus_u + rd.y() * defocus_v;
     }
 
     vec3 sample_square(){
