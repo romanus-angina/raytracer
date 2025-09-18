@@ -45,8 +45,8 @@ class camera{
     vec3 pixel_delta_u; // World space vector to move one pixel right
     vec3 pixel_delta_v; // World space vector to move one pixel down
     vec3 u, v, w; // Camera coordinate system basis vectors
-    double defocus_u; // Defocus vectors for depth of field effect (not implemented)
-    double defocus_v; // Defocus vectors for depth of field effect (not implemented)
+    vec3 defocus_u; // Defocus vectors for depth of field effect (not implemented)
+    vec3 defocus_v; // Defocus vectors for depth of field effect (not implemented)
 
     void initialize(){
         // Calculate the image height based on the aspect ratio
@@ -79,9 +79,9 @@ class camera{
         pixel00_loc = viewport_upper_left + 0.5 *(pixel_delta_u + pixel_delta_v);
 
         // Defocus vectors for depth of field effect (not implemented)
-        auto defocus_radius = focus_dist * tan(degrees_to_radians(defocus_angle) / 2);
-        defocus_u = defocus_radius * u;
-        defocus_v = defocus_radius * v;
+        auto defocus_radius = focus_dist * std::tan(degrees_to_radians(defocus_angle) / 2);
+        defocus_u =  u * defocus_radius;
+        defocus_v = v * defocus_radius;
     }
 
 
@@ -113,8 +113,8 @@ class camera{
     }
 
     point3 defocus_disk_sample(){
-        auto rd = sample_square();
-        return center + rd.x() * defocus_u + rd.y() * defocus_v;
+        auto p = random_in_unit_disk();
+        return center + (p[0]* defocus_u) + (p[1] * defocus_v);
     }
 
     vec3 sample_square(){
