@@ -6,11 +6,17 @@
 # include "interval.h"
 class sphere : public hittable {
     public:
-        sphere(const point3& center, double radius, shared_ptr<material> mat)
-            : center(center), radius(std::fmax(0, radius)), mat(mat) {}
+        // Stationary Sphere
+        sphere(const point3& static_center, double radius, shared_ptr<material> mat)
+            : center(static_center, vec3(0,0,0)),radius(std::fmax(0, radius)), mat(mat) {}
+
+        // Moving Sphere
+        sphere(const point3& center0, const point3& center1, double radius, shared_ptr<material> mat)
+            : center(center0, center1 - center0), radius(std::fmax(0, radius)), mat(mat) {}
 
         bool hit(const ray& r, interval ray_t, hit_record& rec) const override{
-            vec3 oc = center - r.origin();
+            point3 curr_center = center.at(r.time());
+            vec3 oc = r.origin() - curr_center;
             auto a = r.direction().length_squared();
             auto h = dot(r.direction(), (oc));
             auto c = oc.length_squared() - radius * radius;
@@ -31,7 +37,7 @@ class sphere : public hittable {
                 rec.t = root;
                 rec.p = r.at(rec.t);
                 rec.mat = mat; // Assign the material of the sphere to the hit record
-                vec3 outward_normal = (rec.p - center) / radius; // Normal at the intersection point
+                vec3 outward_normal = (rec.p - curr_center) / radius; // Normal at the intersection point
                 rec.set_face_normal(r, outward_normal); // Set the normal and front face
                 return true; // Intersection found
             
@@ -39,7 +45,7 @@ class sphere : public hittable {
         
 
     private:
-        point3 center;
+        ray center;
         double radius;
         shared_ptr<material> mat; // Pointer to the material of the sphere
 };
