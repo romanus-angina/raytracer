@@ -6,6 +6,10 @@ class interval {
     public:
         interval() : min(+infinity), max(-infinity) {}
         interval(double min, double max) : min(min), max(max) {}
+        interval(const interval& a, const interval& b){
+            min = a.min <= b.min ? a.min : b.min;
+            max = a.max >= b.max ? a.max : b.max;
+        }
         double min;
         double max;
 

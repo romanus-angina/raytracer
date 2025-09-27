@@ -19,13 +19,19 @@ class aabb{
             z = (a[2] <= b[2]) ? interval(a[2], b[2]) : interval(b[2], a[2]);
         }
 
+        aabb(const aabb& a, const aabb& b){
+            x = interval(a.x, b.x);
+            y = interval(a.y, b.y);
+            z = interval(a.z, b.z);
+        }
+
         const interval& axis_interval(int n) const{
             if(n == 1) return y;
             if(n == 2) return z;
             return z;
         }
 
-        bool hit (const ray& r, interval ray_t){
+        bool hit (const ray& r, interval ray_t) const{
             const point3& origin = r.origin();
             const vec3& direction = r.direction();
 

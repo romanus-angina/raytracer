@@ -2,7 +2,8 @@
 #define HITTABLE_LIST_H
 #include "hittable.h"
 #include<memory>
-# include "interval.h"
+#include "interval.h"
+#include "aabb.h"
 
 class hittable_list: public hittable {
     public:
@@ -11,7 +12,10 @@ class hittable_list: public hittable {
         std::vector<shared_ptr<hittable>> objects;
 
         void clear() { objects.clear(); }
-        void add(shared_ptr<hittable> object) { objects.push_back(object); }
+        void add(shared_ptr<hittable> object) { 
+            objects.push_back(object);
+            bbox = aabb(bbox, object->bounding_box());
+            }
 
         virtual bool hit(const ray& r, interval ray_t, hit_record& rec) const override{
             hit_record temp_rec;
@@ -27,6 +31,10 @@ class hittable_list: public hittable {
             }
             return hit_anything; // Return true if any object was hit
         }
+
+        aabb bounding_box() const override {return bbox;}
+    private:
+        aabb bbox;
 };
 
 #endif // HITTABLE_LIST_H
