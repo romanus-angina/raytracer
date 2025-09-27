@@ -9,7 +9,7 @@
 class bvh_node: public hittable {
     public:
         bvh_node(hittable_list list): bvh_node(list.objects, 0, list.objects.size()) {
-            // Creates an implicit copy of the hittable list to be modified}
+            // Creates an implicit copy of the hittable list to be modified
         }
 
         bvh_node(std::vector<shared_ptr<hittable>>& objects, size_t start, size_t end){

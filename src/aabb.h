@@ -7,7 +7,7 @@ class aabb{
     public:
         interval x, y, z;
 
-        aabb(); //Empty intervals by default
+        aabb(): x(), y(), z() {}  //Empty intervals by default
 
         aabb(const interval& x, const interval& y, const interval& z)
             : x(x), y(y), z(z) {}
@@ -28,7 +28,7 @@ class aabb{
         const interval& axis_interval(int n) const{
             if(n == 1) return y;
             if(n == 2) return z;
-            return z;
+            return x;
         }
 
         bool hit (const ray& r, interval ray_t) const{

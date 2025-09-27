@@ -9,6 +9,11 @@ class material {
         virtual bool scatter(
             const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered
         ) const {
+            // Suppress unused parameter warnings
+            (void)r_in;
+            (void)rec;
+            (void)attenuation;
+            (void)scattered;
             return false;
         };
 

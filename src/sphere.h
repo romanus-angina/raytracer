@@ -17,8 +17,8 @@ class sphere : public hittable {
         sphere(const point3& center0, const point3& center1, double radius, shared_ptr<material> mat)
             : center(center0, center1 - center0), radius(std::fmax(0, radius)), mat(mat) {
                 auto rvec = vec3(radius, radius, radius);
-                aabb bbox1 = aabb(center.at(0) - rvec, center.at(1) + rvec);
-                aabb bbox2 = aabb(center.at(1) - rvec, center.at(0) + rvec);
+                aabb bbox1 = aabb(center.at(0) - rvec, center.at(0) + rvec);
+                aabb bbox2 = aabb(center.at(1) - rvec, center.at(1) + rvec);
                 bbox = aabb(bbox1, bbox2);
             }
 
