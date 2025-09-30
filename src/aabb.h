@@ -30,6 +30,15 @@ class aabb{
             if(n == 2) return z;
             return x;
         }
+        int longest_axis() const{
+            double xsize = x.size();
+            double ysize = y.size();
+            double zsize = z.size();
+
+            if(xsize >= ysize && xsize >= zsize) return 0;
+            if(ysize >= zsize) return 1;
+            return 2;
+        }
 
         bool hit (const ray& r, interval ray_t) const{
             const point3& origin = r.origin();
@@ -56,6 +65,11 @@ class aabb{
             return true;
         }
 
+        static const aabb empty, universe;
+
 };
+
+const aabb aabb::empty = aabb(interval::empty, interval::empty, interval::empty);
+const aabb aabb::universe = aabb(interval::universe, interval::universe, interval::universe);
 
 #endif // AABB_H
