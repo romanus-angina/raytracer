@@ -8,6 +8,8 @@ class hit_record{
         point3 p; // Point of intersection
         vec3 normal; // Normal at the intersection point
         double t; // Parameter t for the ray equation
+        double u; // U texture coordinate
+        double v; // V texture coordinate
         shared_ptr<material> mat; // Pointer to the material of the object hit
         bool front_face; // Indicates if the ray hit the front or back face of the object
 
