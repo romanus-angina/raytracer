@@ -2,38 +2,7 @@
 
 A basic raytracer implementation in C++ that renders 3D scenes with realistic lighting, reflections, and refractions. This project follows the concepts from [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html) and creates photorealistic images of spheres with different materials.
 
-## Features
-
-- **Realistic rendering**: Generates images with proper lighting, shadows, and reflections
-- **Multiple materials**: 
-  - Lambertian (matte/diffuse surfaces)
-  - Metal (reflective surfaces with controllable fuzziness)
-  - Dielectric (glass-like materials with refraction)
-- **Anti-aliasing**: Samples multiple rays per pixel for smooth edges
-- **Configurable camera**: Adjustable field of view, image resolution, and sample count
-- **PPM image output**: Creates standard image files viewable in most image viewers
-
-## Project Structure
-
-```
-raytracer/
-├── src/
-│   ├── main.cc              # Main program and scene setup
-│   ├── camera.h             # Camera class with rendering logic
-│   ├── material.h           # Material classes (lambertian, metal, dielectric)
-│   ├── sphere.h             # Sphere geometry implementation
-│   ├── hittable.h           # Base class for renderable objects
-│   ├── hittable_list.h      # Container for multiple objects
-│   ├── ray.h                # Ray class for ray-object intersection
-│   ├── vec3.h               # 3D vector math utilities
-│   ├── color.h              # Color handling and gamma correction
-│   ├── interval.h           # Range/interval utilities
-│   └── constants.h          # Mathematical constants and utilities
-├── CMakeLists.txt           # Build configuration
-└── README.md
-```
-
-## Prerequisites
+## Dependencies
 
 - **C++ compiler** with C++11 support (GCC, Clang, or MSVC)
 - **CMake** version 3.1 or higher
@@ -185,19 +154,6 @@ cam.max_depth = 50;
 - Reduce `samples_per_pixel` or `image_width` for testing
 - Lower `max_depth` if scenes have many reflective/refractive objects
 
-## Technical Details
-
-This raytracer implements:
-
-- **Ray-sphere intersection** using quadratic equation solving
-- **Lambertian reflection** for diffuse materials
-- **Metal reflection** with Fresnel-like behavior
-- **Snell's law refraction** for dielectric materials
-- **Schlick's approximation** for realistic glass reflection
-- **Gamma correction** for proper color display
-- **Jittered sampling** for anti-aliasing
-
-The rendering process traces rays from the camera through each pixel, calculating intersections with objects and recursively following reflected and refracted rays to determine the final pixel color.
 
 ## Next Steps
 
