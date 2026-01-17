@@ -95,19 +95,11 @@ void checkered_spheres(){
     cam.lookat = point3(0,0,0);
     cam.vup = vec3(0,1,0);
     cam.defocus_angle = 0.0;
-    cam.focus_dist = 10.0;
 
     // Render
     cam.render(world);
 }
 
 int main(){
-    switch(2){
-        case 1:
-            checkered_spheres();
-            break;
-        case 2:
-            bouncing_spheres();
-            break;
-        }
+    checkered_spheres();
 }
