@@ -12,7 +12,7 @@ int main(){
     hittable_list world;
     
     // World materials
-    auto checker = std::make_shared<checker_texture>(0.32, color(0.2, 0.3, 0.1), color(0.9, 0.9, 0.9));
+    auto checker = std::make_shared<checker_texture>(0.1, color(0.2, 0.3, 0.1), color(0.9, 0.9, 0.9));
     // auto material_ground = std::make_shared<lambertian>(color(0.5, 0.5, 0.5));
     world.add(std::make_shared<sphere>(point3(0.0, -1000, 0), 1000.0, make_shared<lambertian>(checker)));
 
