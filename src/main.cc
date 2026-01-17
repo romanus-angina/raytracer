@@ -109,4 +109,5 @@ int main(){
         case 2:
             bouncing_spheres();
             break;
+        }
 }
