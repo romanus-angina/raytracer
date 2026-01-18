@@ -101,5 +101,15 @@ void checkered_spheres(){
 }
 
 int main(){
-    checkered_spheres();
+    switch(2){
+        case 1:
+            bouncing_spheres();
+            break;
+        case 2:
+            checkered_spheres();
+            break;
+        default:
+            std::cerr << "Invalid scene selection." << std::endl;
+            break;
+    }
 }

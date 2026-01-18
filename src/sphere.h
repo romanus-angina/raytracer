@@ -44,14 +44,27 @@ class sphere : public hittable {
                 }
                 rec.t = root;
                 rec.p = r.at(rec.t);
-                rec.mat = mat; // Assign the material of the sphere to the hit record
-                vec3 outward_normal = (rec.p - curr_center) / radius; // Normal at the intersection point
-                rec.set_face_normal(r, outward_normal); // Set the normal and front face
-                return true; // Intersection found
+                rec.mat = mat; 
+                vec3 outward_normal = (rec.p - curr_center) / radius; 
+                rec.set_face_normal(r, outward_normal); 
+                get_sphere_uv(outward_normal, rec.u, rec.v); 
+                return true; 
             
         }
         
         aabb bounding_box() const override {return bbox;}
+
+        void get_sphere_uv(const point3& p, double& u, double& v) const {
+            // p: a point on the sphere of radius one, centered at the origin.
+            // u: returned value [0,1] of angle around the Y axis from X=-1.
+            // v: returned value [0,1] of angle from Y=-1 to Y=+1.
+            // <1 0 0> yields <0.50 0.50> <-1 0 0> yields <0.00 0.50>
+            auto theta = acos(-p.y());
+            auto phi = atan2(-p.z(), p.x()) + pi;
+
+            u = phi / (2 * pi);
+            v = theta / pi;
+        }
 
     private:
         ray center;
