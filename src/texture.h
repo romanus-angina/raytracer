@@ -81,7 +81,7 @@ class noise_texture: public texture {
         noise_texture(double scale) : scale(scale) {}
 
         color value(double u, double v, const point3& p) const override {
-            return color(1,1,1) * noise.noise(p * scale); 
+            return color(1,1,1) * 0.5 * (1 + noise.noise(p * scale)); 
         }
     private:
         perlin noise;
