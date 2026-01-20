@@ -1,6 +1,8 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 #include "constants.h"
+#include "rt_stb_image.h"
+#include "perlin.h"
 
 class texture{
     public:
@@ -47,6 +49,42 @@ class checker_texture: public texture{
     shared_ptr<texture> even;
     shared_ptr<texture> odd;
 
+};
+
+class image_texture: public texture {
+    public:
+        image_texture(const char* filename) : image(filename) {}
+
+    color value(double u, double v, const point3& p) const override{ 
+        // If no image data, return pure cyan for debugging
+        if(image.width() == 0 || image.height() == 0) return color(0, 1, 1);
+
+        // Clamp u,v to [0,1]
+        u = interval(0,1).clamp(u);
+        v = 1.0 - interval(0,1).clamp(v); 
+
+        auto i = int(u * image.width());
+        auto j = int(v * image.height());
+        auto pixel = image.pixel_data(i, j);
+
+        auto color_scale = 1.0 / 255.0;
+        return color(color_scale*pixel[0], color_scale*pixel[1], color_scale*pixel[2]);
+    }
+
+    private:
+        rt_image image;
+
+};
+
+class noise_texture: public texture {
+    public:
+        noise_texture() {}
+
+        color value(double u, double v, const point3& p) const override {
+            return color(1,1,1) * noise.noise(p); 
+        }
+    private:
+        perlin noise;
 };
 
 #endif

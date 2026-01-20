@@ -100,13 +100,66 @@ void checkered_spheres(){
     cam.render(world);
 }
 
+void earth(){
+    hittable_list world;
+
+    auto earth_texture = make_shared<image_texture>("images/earthmap.jpg");
+    auto earth_surface = make_shared<lambertian>(earth_texture);
+    world.add(make_shared<sphere>(point3(0,0,0), 2.0, earth_surface));
+
+    // Camera
+    camera cam;
+    
+    cam.aspect_ratio = 16.0 / 9.0;
+    cam.image_width = 400;
+    cam.samples_per_pixel = 100;
+    cam.max_depth = 50;
+    cam.vfov = 20.0;
+    cam.lookfrom = point3(0,0,12);
+    cam.lookat = point3(0,0,0);
+    cam.vup = vec3(0,1,0);
+    cam.defocus_angle = 0.0;
+
+    // Render
+    cam.render(world);
+}
+
+void perlin_spheres(){
+    hittable_list world;
+
+    auto perlin_texture = make_shared<noise_texture>();
+    world.add(make_shared<sphere>(point3(0,-1000,0), 1000, make_shared<lambertian>(perlin_texture)));
+    world.add(make_shared<sphere>(point3(0,2,0), 2, make_shared<lambertian>(perlin_texture)));
+
+    camera cam;
+    
+    cam.aspect_ratio = 16.0 / 9.0;
+    cam.image_width = 400;
+    cam.samples_per_pixel = 100;
+    cam.max_depth = 50;
+    cam.vfov = 20.0;
+    cam.lookfrom = point3(13,2,3);
+    cam.lookat = point3(0,0,0);
+    cam.vup = vec3(0,1,0);
+    cam.defocus_angle = 0.0;
+
+    // Render
+    cam.render(world);
+}
+
 int main(){
-    switch(2){
+    switch(4){
         case 1:
             bouncing_spheres();
             break;
         case 2:
             checkered_spheres();
+            break;
+        case 3:
+            earth();
+            break;
+        case 4:
+            perlin_spheres();
             break;
         default:
             std::cerr << "Invalid scene selection." << std::endl;
