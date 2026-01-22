@@ -9,6 +9,7 @@ class quad : public hittable {
             auto n = cross(u, v);
             normal = unit_vector(n);
             D = dot(normal, Q);
+            w = n / dot(n, n); // Precompute for
             set_bounding_box();
         }
 
@@ -48,6 +49,7 @@ class quad : public hittable {
         point3 Q; // One corner of the quad
         vec3 u;   // Edge vector from Q
         vec3 v;   // Edge vector from Q
+        vec3 w;   // Precomputed vector for barycentric coordinates
         shared_ptr<material> mat;   // Material of the quad
         aabb bbox; // Axis-aligned bounding box
         vec3 normal; // Normal vector of the quad
