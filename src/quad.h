@@ -4,7 +4,7 @@
 
 class quad : public hittable {
     public:
-        quad(const point3& Q, const vec3& u, vec3& v, shared_ptr<material> mat)
+        quad(const point3& Q, const vec3& u, const vec3& v, shared_ptr<material> mat)
         : Q(Q), u(u), v(v), mat(mat) {
             auto n = cross(u, v);
             normal = unit_vector(n);
@@ -36,6 +36,13 @@ class quad : public hittable {
             }
 
             auto intersection = r.at(t);
+            vec3 planar_hitpt_vector = intersection - Q;
+            auto alpha = dot(w, cross(planar_hitpt_vector, w));
+            auto beta = dot(w, cross(u, planar_hitpt_vector));
+
+            if(!is_interior(alpha, beta, rec)) {
+                return false; // Intersection is outside the quad
+            }
 
             rec.t = t;
             rec.p = intersection;
@@ -43,6 +50,18 @@ class quad : public hittable {
 
             rec.set_face_normal(r, normal);
 
+            return true;
+        }
+
+        virtual bool is_interior(double alpha, double beta, hit_record& rec) const {
+            interval unit_interval = interval(0.0, 1.0);
+
+            if(!unit_interval.contains(alpha) || !unit_interval.contains(beta)) {
+                return false;
+            }
+
+            rec.u = alpha;
+            rec.v = beta;
             return true;
         }
     private:
