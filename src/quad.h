@@ -9,7 +9,7 @@ class quad : public hittable {
             auto n = cross(u, v);
             normal = unit_vector(n);
             D = dot(normal, Q);
-            w = n / dot(n, n); // Precompute for
+            w = n / dot(n, n); // Precompute w vector
             set_bounding_box();
         }
 
@@ -37,7 +37,7 @@ class quad : public hittable {
 
             auto intersection = r.at(t);
             vec3 planar_hitpt_vector = intersection - Q;
-            auto alpha = dot(w, cross(planar_hitpt_vector, w));
+            auto alpha = dot(w, cross(planar_hitpt_vector, v));
             auto beta = dot(w, cross(u, planar_hitpt_vector));
 
             if(!is_interior(alpha, beta, rec)) {
