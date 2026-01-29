@@ -18,6 +18,14 @@ class material {
             return false;
         };
 
+        virtual color emitted(double u, double v, const point3& p) const {
+            // Suppress unused parameter warnings
+            (void)u;
+            (void)v;
+            (void)p;
+            return color(0,0,0);
+        }
+
 };
 
 class metal: public material {
@@ -99,7 +107,7 @@ class diffuse_light : public material {
         diffuse_light(shared_ptr<texture> tex) : tex(tex) {}
         diffuse_light(color emit) : tex(make_shared<solid_color>(emit)) {}
 
-        color emitted(double u, double v, const point3& p) const{
+        color emitted(double u, double v, const point3& p) const override{
             return tex->value(u, v, p);
         }
 
