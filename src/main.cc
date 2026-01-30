@@ -70,7 +70,7 @@ void bouncing_spheres(){
     cam.vup = vec3(0,1,0);
     cam.defocus_angle = 0.6;
     cam.focus_dist = 10.0;
-
+    cam.background = color(0.7, 0.8, 1.0);
     // Render
     cam.render(world);
 
@@ -95,7 +95,7 @@ void checkered_spheres(){
     cam.lookat = point3(0,0,0);
     cam.vup = vec3(0,1,0);
     cam.defocus_angle = 0.0;
-
+    cam.background = color(0.7, 0.8, 1.0);
     // Render
     cam.render(world);
 }
@@ -119,7 +119,7 @@ void earth(){
     cam.lookat = point3(0,0,0);
     cam.vup = vec3(0,1,0);
     cam.defocus_angle = 0.0;
-
+    cam.background = color(0.7, 0.8, 1.0);
     // Render
     cam.render(world);
 }
@@ -142,7 +142,7 @@ void perlin_spheres(){
     cam.lookat = point3(0,0,0);
     cam.vup = vec3(0,1,0);
     cam.defocus_angle = 0.0;
-
+    cam.background = color(0.7, 0.8, 1.0);
     // Render
     cam.render(world);
 }
@@ -174,6 +174,7 @@ void quads(){
     cam.lookat = point3(0,0,0);
     cam.vup = vec3(0,1,0);
     cam.defocus_angle = 0.0;
+    cam.background = color(0.7, 0.8, 1.0);
 
     // Render
     cam.render(world);
