@@ -179,8 +179,32 @@ void quads(){
     // Render
     cam.render(world);
 }
+
+void simple_light(){
+    hittable_list world;
+
+    auto perlin_texture = make_shared<noise_texture>(4);
+    world.add(make_shared<sphere>(point3(0,-1000,0), 1000, make_shared<lambertian>(perlin_texture)));
+    world.add(make_shared<sphere>(point3(0,2,0), 2, make_shared<lambertian>(perlin_texture)));
+
+    // Camera
+    camera cam;
+    
+    cam.aspect_ratio = 16.0 / 9.0;
+    cam.image_width = 400;
+    cam.samples_per_pixel = 100;
+    cam.max_depth = 50;
+    cam.vfov = 20.0;
+    cam.lookfrom = point3(26,3,6);
+    cam.lookat = point3(0,2,0);
+    cam.vup = vec3(0,1,0);
+    cam.defocus_angle = 0.0;
+    cam.background = color(0.0, 0.0, 0.0);
+    // Render
+    cam.render(world);
+}
 int main(){
-    switch(5){
+    switch(6){
         case 1:
             bouncing_spheres();
             break;
@@ -195,6 +219,9 @@ int main(){
             break;
         case 5:
             quads();
+            break;
+        case 6:
+            simple_light();
             break;
         default:
             std::cerr << "Invalid scene selection." << std::endl;
