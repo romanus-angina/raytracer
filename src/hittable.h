@@ -54,6 +54,38 @@ class translate: public hittable {
 
 class rotate_y: public hittable {
     public:
+        rotate_y(shared_ptr<hittable> object, double angle): object(object) {
+            auto radians = degrees_to_radians(angle);
+            cos_theta = std::cos(radians);
+            sin_theta = std::sin(radians);
+            bbox = object->bounding_box();
+
+            // Compute rotated bounding box
+            point3 min(infinity, infinity, infinity);
+            point3 max(-infinity, -infinity, -infinity);
+
+            for(int i = 0; i < 2; i++){
+                for(int j = 0; j < 2; j++){
+                    for(int k = 0; k < 2; k++){
+                        auto x = i * bbox.x.max + (1 - i) * bbox.x.min;
+                        auto y = j * bbox.y.max + (1 - j) * bbox.y.min;
+                        auto z = k * bbox.z.max + (1 - k) * bbox.z.min;
+
+                        auto newx = cos_theta * x + sin_theta * z;
+                        auto newz = -sin_theta * x + cos_theta * z;
+
+                        vec3 tester(newx, y, newz);
+
+                        for(int c = 0; c < 3; c++){
+                            min[c] = fmin(min[c], tester[c]);
+                            max[c] = fmax(max[c], tester[c]);
+                        }
+                    }
+                }
+            }
+            bbox = aabb(min, max);
+        }
+
         bool hit(const ray& r, interval ray_t, hit_record& rec) const override {
             auto origin = point3(cos_theta * r.origin().x() - sin_theta * r.origin().z(),
                                 r.origin().y(),
@@ -77,5 +109,12 @@ class rotate_y: public hittable {
 
             return true;
         }
-}
+
+        aabb bounding_box() const override { return bbox; }
+    private:
+        shared_ptr<hittable> object;
+        double cos_theta;
+        double sin_theta;
+        aabb bbox;
+};
 #endif // HITTABLE_H
